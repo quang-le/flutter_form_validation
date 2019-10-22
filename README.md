@@ -1,16 +1,22 @@
 # filters
 
-an app to test validation library
+form validation (most common fields) for later re-use, ideally without dependencies
 
-## Getting Started
+## Targeted features
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+[] date input format
+[] date input conversion to DateTime
+[] html chars sanitizing
+[] email format validation
+[] First name format 
+[] First name validation
+[] Last name format 
+[] Last name validation
+[] phone number format
+[] phone number validation (national standards)
+[] country format
+[] country validation
+[] zip code format
+[] zip code validation
+[] address code format
+[] address code validation
