@@ -1,3 +1,4 @@
+import 'package:filters/fields/date_field.dart';
 import 'package:filters/functions/convert.dart';
 import 'package:flutter/material.dart';
 
@@ -26,19 +27,9 @@ class _FilterFieldsState extends State<FilterFields> {
               return 'Please type in your name';
             },
           ),
-          TextFormField(
-            initialValue: 'date field',
-            inputFormatters: [DateInputFormatter()],
-            validator: (value) {
-              try {
-                var date = DateTime.parse(value);
-                print(date);
-                return date.toString();
-              } catch (e) {
-                print('error parsing date');
-                return 'please use correct date input';
-              }
-            },
+          DateField(
+            formKey: _formKey,
+            saveData: _saveDate,
           ),
           TextFormField(
             initialValue: 'email field',
@@ -56,11 +47,17 @@ class _FilterFieldsState extends State<FilterFields> {
             onPressed: () {
               if (_formKey.currentState.validate()) {
                 print('form is valid');
+                _formKey.currentState.save();
               }
             },
           )
         ],
       ),
     );
+  }
+
+  void _saveDate(DateTime date) {
+    print('date entered is $date');
+    return;
   }
 }
