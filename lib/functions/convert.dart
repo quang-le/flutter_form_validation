@@ -15,13 +15,22 @@ class Convert {
     return null;
   }
 
-  // needs dd/mm/yyyy format
-  static DateTime toDate(String str) {
-    if (str == null) return null;
+  // format string to use with DateTime.parse. default is dd/mm/yyyy
+  static String formatStringForParsing(String str, String format) {
     if (str.length != 10) return null;
-    DateTime date;
-    try {
-      date = DateTime.parse('${str[6]}'
+    String dateString;
+    if (format == 'us') {
+      dateString = '${str[6]}'
+          '${str[7]}'
+          '${str[8]}'
+          '${str[9]}-'
+          '${str[0]}'
+          '${str[1]}-'
+          '${str[3]}'
+          '${str[4]} '
+          '00:00:00Z';
+    } else {
+      dateString = '${str[6]}'
           '${str[7]}'
           '${str[8]}'
           '${str[9]}-'
@@ -29,16 +38,48 @@ class Convert {
           '${str[4]}-'
           '${str[0]}'
           '${str[1]} '
-          '00:00:00');
+          '00:00:00Z';
+    }
+    return dateString;
+  }
+
+  // takes a YYYY-MM-DD 00:00:00Z string and checks for the day and month values
+  static String checkDateStringFormatting(String str) {
+    if (str == null) return null;
+    String dayString = str.substring(8, 10),
+        monthString = str.substring(5, 7),
+        yearString = str.substring(0, 4);
+    int day = int.tryParse(dayString), month = int.tryParse(monthString);
+    double year = double.tryParse(yearString);
+
+    if (day > 31) return null;
+    if (month > 12) return null;
+    if (year % 4 == 0 && month == 2 && day > 29) return null;
+    if (year % 4 != 0 && month == 2 && day > 28) return null;
+    if (day > 30 && (month == 4 || month == 6 || month == 9 || month == 11))
+      return null;
+    return str;
+  }
+
+  // check if string is parsable then DateTime.parse.
+  static DateTime toDate(String str) {
+    DateTime date;
+    try {
+      date = DateTime.parse(str);
     } catch (e) {
       print('error parsing date: $e');
+      return null;
     }
+
     return date;
   }
 }
 
 // To be used with TextFormField's inputFormatters field
+//use 'eur or us to differentiate date formats'
 class DateInputFormatter extends TextInputFormatter {
+  final String format;
+  DateInputFormatter({this.format = 'eur'});
   @override
   TextEditingValue formatEditUpdate(
       TextEditingValue oldValue, TextEditingValue newValue) {

@@ -3,11 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class DateField extends StatefulWidget {
-  // if widget is used in Form, pass the Form's key, otherwise pass a GlobalKey()
-  final GlobalKey formKey;
   // must have a DateTime argument
   final Function saveData;
   final String errorMessage;
+  final String dateNotInRange;
+  final String formatError;
+  final String format;
 
   //keep fields from FormTextField widget
   final TextEditingController controller;
@@ -46,7 +47,6 @@ class DateField extends StatefulWidget {
 
   const DateField({
     Key key,
-    @required this.formKey,
     @required this.saveData,
     this.focusNode,
     this.controller,
@@ -82,8 +82,10 @@ class DateField extends StatefulWidget {
     this.enableInteractiveSelection = true,
     this.buildCounter,
     this.errorMessage = 'Please use dd/mm/yyyy date format',
+    this.format = 'eur',
+    this.dateNotInRange = 'dates not in range',
+    this.formatError = 'format error',
   })  : assert(saveData != null),
-        assert(formKey != null),
         super(key: key);
   @override
   _DateFieldState createState() => _DateFieldState();
@@ -96,17 +98,11 @@ class _DateFieldState extends State<DateField> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      key: widget.key,
       keyboardType: TextInputType.datetime,
       inputFormatters: [DateInputFormatter()],
       validator: (value) {
-        DateTime date = Convert.toDate(value);
-        if (date != null) {
-          setState(() {
-            data = date;
-          });
-          return null;
-        }
-        return widget.errorMessage;
+        return _validator(value);
       },
       onSaved: (value) {
         widget.saveData(data);
@@ -146,5 +142,22 @@ class _DateFieldState extends State<DateField> {
       enableInteractiveSelection: widget.enableInteractiveSelection,
       buildCounter: widget.buildCounter,
     );
+  }
+
+  String _validator(String value) {
+    String formattedToParse =
+        Convert.formatStringForParsing(value, widget.format);
+    if (formattedToParse == null) return widget.formatError;
+    String dateAndMonthValuesInRange =
+        Convert.checkDateStringFormatting(formattedToParse);
+    if (dateAndMonthValuesInRange == null) return widget.dateNotInRange;
+    DateTime date = Convert.toDate(dateAndMonthValuesInRange);
+    if (date != null) {
+      setState(() {
+        data = date;
+      });
+      return null;
+    }
+    return widget.errorMessage;
   }
 }

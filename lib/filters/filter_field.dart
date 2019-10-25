@@ -28,7 +28,6 @@ class _FilterFieldsState extends State<FilterFields> {
             },
           ),
           DateField(
-            formKey: _formKey,
             saveData: _saveDate,
           ),
           TextFormField(
