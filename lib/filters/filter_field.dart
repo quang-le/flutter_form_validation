@@ -1,5 +1,4 @@
 import 'package:filters/fields/date_field.dart';
-import 'package:filters/functions/convert.dart';
 import 'package:flutter/material.dart';
 
 class FilterFields extends StatefulWidget {

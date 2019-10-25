@@ -9,6 +9,8 @@ class DateField extends StatefulWidget {
   final String dateNotInRange;
   final String formatError;
   final String format;
+  // if DateField doesn't have a Form parent, formKey is necessary
+  final GlobalKey<FormFieldState> formKey;
 
   //keep fields from FormTextField widget
   final TextEditingController controller;
@@ -85,6 +87,7 @@ class DateField extends StatefulWidget {
     this.format = 'eur',
     this.dateNotInRange = 'dates not in range',
     this.formatError = 'format error',
+    this.formKey,
   })  : assert(saveData != null),
         super(key: key);
   @override
@@ -98,7 +101,7 @@ class _DateFieldState extends State<DateField> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      key: widget.key,
+      key: widget.formKey,
       keyboardType: TextInputType.datetime,
       inputFormatters: [DateInputFormatter()],
       validator: (value) {
@@ -145,11 +148,11 @@ class _DateFieldState extends State<DateField> {
   }
 
   String _validator(String value) {
-    String formattedToParse =
+    String formattedForParsing =
         Convert.formatStringForParsing(value, widget.format);
-    if (formattedToParse == null) return widget.formatError;
+    if (formattedForParsing == null) return widget.formatError;
     String dateAndMonthValuesInRange =
-        Convert.checkDateStringFormatting(formattedToParse);
+        Convert.checkDateStringFormatting(formattedForParsing);
     if (dateAndMonthValuesInRange == null) return widget.dateNotInRange;
     DateTime date = Convert.toDate(dateAndMonthValuesInRange);
     if (date != null) {
