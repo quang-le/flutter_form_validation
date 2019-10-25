@@ -16,6 +16,7 @@ class _DateOnlyState extends State<DateOnly> {
         child: Column(
       children: <Widget>[
         DateField(
+          decoration: InputDecoration(labelText: 'Date'),
           formKey: formKey,
           saveData: _saveDate,
         ),

@@ -1,4 +1,5 @@
 import 'package:filters/fields/date_field.dart';
+import 'package:filters/fields/email_field.dart';
 import 'package:flutter/material.dart';
 
 class FullForm extends StatefulWidget {
@@ -27,18 +28,12 @@ class _FullFormState extends State<FullForm> {
             },
           ),
           DateField(
+            decoration: InputDecoration(labelText: 'Date'),
             saveData: _saveDate,
           ),
-          TextFormField(
-            initialValue: 'email field',
-            validator: (value) {
-              if (value is String && value.isNotEmpty) {
-                return null;
-              }
-              print('Please type in your email');
-              // return the error message that will be displayed under the field
-              return 'Please type in your email';
-            },
+          EmailField(
+            decoration: InputDecoration(labelText: 'Email'),
+            saveData: _saveEmail,
           ),
           RaisedButton(
             child: Text('Submit'),
@@ -56,6 +51,11 @@ class _FullFormState extends State<FullForm> {
 
   void _saveDate(DateTime date) {
     print('date entered is $date');
+    return;
+  }
+
+  void _saveEmail(String email) {
+    print('email entered is $email');
     return;
   }
 }
