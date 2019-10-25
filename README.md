@@ -3,7 +3,7 @@
 form validation (most common fields) for later re-use, ideally without dependencies
 
 ## credits
-regexp for email format validation taken from (validators package)[https://pub.dev/packages/validators]
+regexp for email format validation taken from [validators package](https://pub.dev/packages/validators)
 
 ## Targeted features
 
