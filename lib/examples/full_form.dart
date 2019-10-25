@@ -1,12 +1,12 @@
 import 'package:filters/fields/date_field.dart';
 import 'package:flutter/material.dart';
 
-class FilterFields extends StatefulWidget {
+class FullForm extends StatefulWidget {
   @override
-  _FilterFieldsState createState() => _FilterFieldsState();
+  _FullFormState createState() => _FullFormState();
 }
 
-class _FilterFieldsState extends State<FilterFields> {
+class _FullFormState extends State<FullForm> {
   final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {

@@ -1,14 +1,14 @@
-import 'package:filters/filters/date_only.dart';
-import 'package:filters/filters/filter_field.dart';
+import 'package:filters/examples/date_only.dart';
+import 'package:filters/examples/full_form.dart';
 import 'package:flutter/material.dart';
 
 class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'test filters',
+      title: 'test examples',
       home: Scaffold(
-        body: SafeArea(child: FilterFields()),
+        body: SafeArea(child: FullForm()),
       ),
     );
   }
