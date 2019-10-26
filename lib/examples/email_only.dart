@@ -1,13 +1,13 @@
 import 'package:filters/fields/date_field.dart';
 import 'package:flutter/material.dart';
 
-class DateOnly extends StatefulWidget {
+class EmailOnly extends StatefulWidget {
   @override
-  _DateOnlyState createState() => _DateOnlyState();
+  _EmailOnlyState createState() => _EmailOnlyState();
 }
 
-class _DateOnlyState extends State<DateOnly> {
-  DateTime testDate;
+class _EmailOnlyState extends State<EmailOnly> {
+  String testEmail;
   // without Form ancestor, you need this GlobalKey to manage validation
   GlobalKey<FormFieldState> formKey = GlobalKey<FormFieldState>();
 
@@ -19,7 +19,7 @@ class _DateOnlyState extends State<DateOnly> {
         DateField(
           decoration: InputDecoration(labelText: 'Date'),
           formKey: formKey,
-          saveData: _saveDate,
+          saveData: _saveEmail,
         ),
         Spacer(flex: 1),
         RaisedButton(
@@ -36,13 +36,13 @@ class _DateOnlyState extends State<DateOnly> {
     ));
   }
 
-  DateTime _saveDate(DateTime fieldValue) {
-    DateTime date = fieldValue;
-    print('date saved : $date');
+  String _saveEmail(String fieldValue) {
+    String email = fieldValue;
+    print('date saved : $email');
     setState(() {
-      testDate = date;
+      testEmail = email;
     });
-    print('state date : $testDate');
-    return date;
+    print('state date : $testEmail');
+    return email;
   }
 }

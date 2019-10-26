@@ -13,7 +13,7 @@ regexp for email format validation taken from [validators package](https://pub.d
 
 [X] html chars sanitizing
 
-[] email format validation
+[X] email format validation
 
 [] First name format 
 
