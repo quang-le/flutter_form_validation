@@ -38,3 +38,7 @@ regexp for email format validation taken from [validators package](https://pub.d
 [] address code format
 
 [] address code validation
+
+# known bugs 
+
+custom input formatters cause cursor to remain at start of text
