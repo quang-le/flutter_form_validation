@@ -1,4 +1,5 @@
 import 'package:filters/functions/sanitize.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 
 class Convert {
@@ -132,5 +133,74 @@ class EmailInputFormatter extends TextInputFormatter {
     String trimmed = newValue.text.trim();
     String sanitized = Sanitize.htmlCharsDelete(trimmed);
     return TextEditingValue(text: sanitized);
+  }
+}
+
+class FirstNameInputValidator extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
+    //RegExp connectors = RegExp(r"[- ]");
+    //RegExp isolateConnectors = RegExp(r"[^- ]");
+
+    return _selectionAwareTextManipulation(newValue, (String substring) {
+      print("I'm on");
+      String input = substring.trimLeft();
+      String firstLetter = input[0].toUpperCase();
+      String upperCaseFirstLetter = input.replaceRange(0, 1, firstLetter);
+      if (!input.contains(' ') && !input.contains('-')) {
+        return upperCaseFirstLetter;
+      }
+      List<String> nameLetters = upperCaseFirstLetter.split('');
+      List<String> formattedLetters = [];
+      for (var i = 0; i < nameLetters.length; i++) {
+        String letterToAdd = nameLetters[i];
+        if (nameLetters[i - 1] == ' ' || nameLetters[i - 1] == '-') {
+          letterToAdd = nameLetters[i].toUpperCase();
+        }
+        formattedLetters.add(letterToAdd);
+      }
+      String formattedName = formattedLetters.join();
+      return formattedName;
+    });
+  }
+
+  TextEditingValue _selectionAwareTextManipulation(
+    TextEditingValue value,
+    String substringManipulation(String substring),
+  ) {
+    final int selectionStartIndex = value.selection.start;
+    final int selectionEndIndex = value.selection.end;
+    String manipulatedText;
+    TextSelection manipulatedSelection;
+    if (selectionStartIndex < 0 || selectionEndIndex < 0) {
+      manipulatedText = substringManipulation(value.text);
+    } else {
+      final String beforeSelection =
+          substringManipulation(value.text.substring(0, selectionStartIndex));
+      final String inSelection = substringManipulation(
+          value.text.substring(selectionStartIndex, selectionEndIndex));
+      final String afterSelection =
+          substringManipulation(value.text.substring(selectionEndIndex));
+      manipulatedText = beforeSelection + inSelection + afterSelection;
+      if (value.selection.baseOffset > value.selection.extentOffset) {
+        manipulatedSelection = value.selection.copyWith(
+          baseOffset: beforeSelection.length + inSelection.length,
+          extentOffset: beforeSelection.length,
+        );
+      } else {
+        manipulatedSelection = value.selection.copyWith(
+          baseOffset: beforeSelection.length,
+          extentOffset: beforeSelection.length + inSelection.length,
+        );
+      }
+    }
+    return TextEditingValue(
+      text: manipulatedText,
+      selection:
+          manipulatedSelection ?? const TextSelection.collapsed(offset: -1),
+      composing:
+          manipulatedText == value.text ? value.composing : TextRange.empty,
+    );
   }
 }

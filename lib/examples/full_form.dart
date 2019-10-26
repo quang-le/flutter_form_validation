@@ -1,5 +1,6 @@
 import 'package:filters/fields/date_field.dart';
 import 'package:filters/fields/email_field.dart';
+import 'package:filters/fields/first_name.dart';
 import 'package:flutter/material.dart';
 
 class FullForm extends StatefulWidget {
@@ -16,16 +17,9 @@ class _FullFormState extends State<FullForm> {
       key: _formKey,
       child: Column(
         children: <Widget>[
-          TextFormField(
-            initialValue: 'name field',
-            autocorrect: false,
-            // use validator to sanitize and validate
-            validator: (value) {
-              if (value is String && value.isNotEmpty) {
-                return null;
-              }
-              return 'Please type in your name';
-            },
+          FirstNameField(
+            decoration: InputDecoration(labelText: 'First Name'),
+            saveData: _saveFirstName,
           ),
           DateField(
             decoration: InputDecoration(labelText: 'Date'),
@@ -56,6 +50,11 @@ class _FullFormState extends State<FullForm> {
 
   void _saveEmail(String email) {
     print('email entered is $email');
+    return;
+  }
+
+  void _saveFirstName(String firstName) {
+    print('email entered is $firstName');
     return;
   }
 }

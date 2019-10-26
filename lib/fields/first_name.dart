@@ -1,15 +1,14 @@
+import 'dart:ffi';
+
 import 'package:filters/functions/convert.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class DateField extends StatefulWidget {
-  // must have a DateTime argument
+class FirstNameField extends StatefulWidget {
+  // must have a String argument
   final Function saveData;
   final String errorMessage;
-  final String dateNotInRange;
-  final String formatError;
-  final String format;
-  // if DateField doesn't have a Form parent, formKey is necessary
+  // if no Form parent GlobalKey<FormFieldState> formKey:
   final GlobalKey<FormFieldState> formKey;
 
   //keep fields from FormTextField widget
@@ -48,7 +47,7 @@ class DateField extends StatefulWidget {
   final bool enableInteractiveSelection;
   final InputCounterWidgetBuilder buildCounter;
 
-  const DateField({
+  const FirstNameField({
     Key key,
     @required this.saveData,
     this.focusNode,
@@ -84,32 +83,35 @@ class DateField extends StatefulWidget {
     this.scrollPadding = const EdgeInsets.all(20.0),
     this.enableInteractiveSelection = true,
     this.buildCounter,
-    this.errorMessage = 'Please use dd/mm/yyyy date format',
-    this.format = 'eur',
-    this.dateNotInRange = 'dates not in range',
-    this.formatError = 'format error',
+    this.errorMessage = 'Please enter valid first name',
     this.formKey,
     this.validator,
   })  : assert(saveData != null),
         super(key: key);
   @override
-  _DateFieldState createState() => _DateFieldState();
+  _FirstNameFieldState createState() => _FirstNameFieldState();
 }
 
-class _DateFieldState extends State<DateField> {
-  // Save input as DateTime in state
-  DateTime data;
+class _FirstNameFieldState extends State<FirstNameField> {
+  // Save input as String in state
+  String data;
+  RegExp forbiddenChars = RegExp(
+      r'[0-9"&(§!)°_$*€^¨%£`\/\\;\.,?@#<>≤=+≠÷…∞}ø¡«¶{‘“•®†ºµ¬ﬁ‡‹≈©◊~|´„”\[»\]™ª∏¥‰≥›√ı¿±]+');
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       key: widget.formKey,
-      keyboardType: TextInputType.datetime,
-      inputFormatters: [DateInputFormatter()],
-      validator: widget.validator ?? _validator,
+      keyboardType: TextInputType.text,
+      inputFormatters: [
+        BlacklistingTextInputFormatter(forbiddenChars),
+        //FirstNameInputValidator(),
+      ],
       onSaved: (value) {
         widget.saveData(data);
       },
+      // TODO use key to update state, so users can use own validators
+      validator: widget.validator ?? _validator,
       // keep original widget options
       controller: widget.controller,
       initialValue: widget.initialValue,
@@ -148,19 +150,11 @@ class _DateFieldState extends State<DateField> {
   }
 
   String _validator(String value) {
-    String formattedForParsing =
-        Convert.formatStringForParsing(value, widget.format);
-    if (formattedForParsing == null) return widget.formatError;
-    String dateAndMonthValuesInRange =
-        Convert.checkDateStringFormatting(formattedForParsing);
-    if (dateAndMonthValuesInRange == null) return widget.dateNotInRange;
-    DateTime date = Convert.toDate(dateAndMonthValuesInRange);
-    if (date != null) {
-      setState(() {
-        data = date;
-      });
-      return null;
-    }
-    return widget.errorMessage;
+    if (value[0] == '-') return widget.errorMessage;
+    if (value.length < 2) return widget.errorMessage;
+    setState(() {
+      data = value;
+    });
+    return null;
   }
 }

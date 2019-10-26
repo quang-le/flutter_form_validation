@@ -11,6 +11,7 @@ class EmailField extends StatefulWidget {
 
   //keep fields from FormTextField widget
   final TextEditingController controller;
+  final FormFieldValidator<String> validator;
   final String initialValue;
   final FocusNode focusNode;
   final InputDecoration decoration;
@@ -82,6 +83,7 @@ class EmailField extends StatefulWidget {
     this.buildCounter,
     this.errorMessage = 'Please enter valid email address',
     this.formKey,
+    this.validator,
   })  : assert(saveData != null),
         super(key: key);
   @override
@@ -98,9 +100,7 @@ class _EmailFieldState extends State<EmailField> {
       key: widget.formKey,
       keyboardType: TextInputType.emailAddress,
       inputFormatters: [EmailInputFormatter()],
-      validator: (value) {
-        return _validator(value);
-      },
+      validator: widget.validator ?? _validator,
       onSaved: (value) {
         widget.saveData(data);
       },
