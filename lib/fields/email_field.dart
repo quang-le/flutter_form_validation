@@ -32,7 +32,7 @@ class EmailField extends StatefulWidget {
   final int minLines;
   final bool expands;
   final int maxLength;
-  final ValueChanged<String> onChanged;
+  //final ValueChanged<String> onChanged;
   final GestureTapCallback onTap;
   final VoidCallback onEditingComplete;
   final ValueChanged<String> onFieldSubmitted;
@@ -69,7 +69,8 @@ class EmailField extends StatefulWidget {
     this.minLines,
     this.expands = false,
     this.maxLength,
-    this.onChanged,
+    //TODO sort out if we let this editable
+    //this.onChanged,
     this.onTap,
     this.onEditingComplete,
     this.onFieldSubmitted,
@@ -93,6 +94,14 @@ class EmailField extends StatefulWidget {
 class _EmailFieldState extends State<EmailField> {
   // Save input as String in state
   String data;
+  TextEditingController _controller;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    _controller = widget.controller ?? TextEditingController();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -104,8 +113,11 @@ class _EmailFieldState extends State<EmailField> {
       onSaved: (value) {
         widget.saveData(data);
       },
+      controller: _controller,
+      onChanged: (value) {
+        Convert.placeCursorAtEndOfText(value, _controller);
+      },
       // keep original widget options
-      controller: widget.controller,
       initialValue: widget.initialValue,
       focusNode: widget.focusNode,
       decoration: widget.decoration,
@@ -127,7 +139,6 @@ class _EmailFieldState extends State<EmailField> {
       minLines: widget.minLines,
       expands: widget.expands,
       onTap: widget.onTap,
-      onChanged: widget.onChanged,
       onEditingComplete: widget.onEditingComplete,
       onFieldSubmitted: widget.onFieldSubmitted,
       enabled: widget.enabled,

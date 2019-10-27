@@ -96,7 +96,15 @@ class _FirstNameFieldState extends State<FirstNameField> {
   // Save input as String in state
   String data;
   RegExp forbiddenChars = RegExp(
-      r'[0-9"&(§!)°_$*€^¨%£`\/\\;\.,?@#<>≤=+≠÷…∞}ø¡«¶{‘“•®†ºµ¬ﬁ‡‹≈©◊~|´„”\[»\]™ª∏¥‰≥›√ı¿±]+');
+      r'[0-9"&(§!)°_$*€^¨%£`\/\\;\.,?@#<>≤=+≠÷…∞}ø¡«¶{‘“•®†ºµ¬ﬁ‡‹≈©◊~|´„”\[»\]™ª∏¥‰≥›√ı¿±:]+');
+  TextEditingController _controller;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    _controller = widget.controller ?? TextEditingController();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -105,15 +113,19 @@ class _FirstNameFieldState extends State<FirstNameField> {
       keyboardType: TextInputType.text,
       inputFormatters: [
         BlacklistingTextInputFormatter(forbiddenChars),
-        //FirstNameInputValidator(),
+        FirstNameInputValidator(),
       ],
       onSaved: (value) {
         widget.saveData(data);
       },
       // TODO use key to update state, so users can use own validators
       validator: widget.validator ?? _validator,
+      controller: _controller,
+      onChanged: (value) {
+        Convert.placeCursorAtEndOfText(value, _controller);
+      },
+
       // keep original widget options
-      controller: widget.controller,
       initialValue: widget.initialValue,
       focusNode: widget.focusNode,
       decoration: widget.decoration,
@@ -135,7 +147,6 @@ class _FirstNameFieldState extends State<FirstNameField> {
       minLines: widget.minLines,
       expands: widget.expands,
       onTap: widget.onTap,
-      onChanged: widget.onChanged,
       onEditingComplete: widget.onEditingComplete,
       onFieldSubmitted: widget.onFieldSubmitted,
       enabled: widget.enabled,

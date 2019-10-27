@@ -99,6 +99,14 @@ class DateField extends StatefulWidget {
 class _DateFieldState extends State<DateField> {
   // Save input as DateTime in state
   DateTime data;
+  TextEditingController _controller;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    _controller = widget.controller ?? TextEditingController();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -110,8 +118,11 @@ class _DateFieldState extends State<DateField> {
       onSaved: (value) {
         widget.saveData(data);
       },
+      controller: _controller,
+      onChanged: (value) {
+        Convert.placeCursorAtEndOfText(value, _controller);
+      },
       // keep original widget options
-      controller: widget.controller,
       initialValue: widget.initialValue,
       focusNode: widget.focusNode,
       decoration: widget.decoration,
@@ -133,7 +144,6 @@ class _DateFieldState extends State<DateField> {
       minLines: widget.minLines,
       expands: widget.expands,
       onTap: widget.onTap,
-      onChanged: widget.onChanged,
       onEditingComplete: widget.onEditingComplete,
       onFieldSubmitted: widget.onFieldSubmitted,
       enabled: widget.enabled,

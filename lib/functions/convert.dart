@@ -82,6 +82,15 @@ class Convert {
         r"^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))$");
     return _email.hasMatch(str.toLowerCase());
   }
+
+  // use with onChanged to keep cursor at end of text
+  static void placeCursorAtEndOfText(
+      String value, TextEditingController controller) {
+    controller
+      ..text = value
+      ..selection = TextSelection.collapsed(offset: controller.text.length);
+    return;
+  }
 }
 
 // To be used with TextFormField's inputFormatters field
@@ -137,70 +146,46 @@ class EmailInputFormatter extends TextInputFormatter {
 }
 
 class FirstNameInputValidator extends TextInputFormatter {
-  @override
-  TextEditingValue formatEditUpdate(
-      TextEditingValue oldValue, TextEditingValue newValue) {
-    //RegExp connectors = RegExp(r"[- ]");
-    //RegExp isolateConnectors = RegExp(r"[^- ]");
+  String uppercaseAfterSpecialChar(String input, String specialChar) {
+    if (input == null || input.length == 0) return input;
+    if (!input.contains(specialChar)) return input;
 
-    return _selectionAwareTextManipulation(newValue, (String substring) {
-      print("I'm on");
-      String input = substring.trimLeft();
-      String firstLetter = input[0].toUpperCase();
-      String upperCaseFirstLetter = input.replaceRange(0, 1, firstLetter);
-      if (!input.contains(' ') && !input.contains('-')) {
-        return upperCaseFirstLetter;
-      }
-      List<String> nameLetters = upperCaseFirstLetter.split('');
-      List<String> formattedLetters = [];
-      for (var i = 0; i < nameLetters.length; i++) {
-        String letterToAdd = nameLetters[i];
-        if (nameLetters[i - 1] == ' ' || nameLetters[i - 1] == '-') {
-          letterToAdd = nameLetters[i].toUpperCase();
-        }
-        formattedLetters.add(letterToAdd);
-      }
-      String formattedName = formattedLetters.join();
-      return formattedName;
-    });
+    List<String> parts = input.split(specialChar);
+    List<String> transformed =
+        List<String>.from(parts.map((part) => firstLetterToUpperCase(part)));
+    String result = transformed.join(specialChar);
+    print('result: $result');
+    return result;
   }
 
-  TextEditingValue _selectionAwareTextManipulation(
-    TextEditingValue value,
-    String substringManipulation(String substring),
-  ) {
-    final int selectionStartIndex = value.selection.start;
-    final int selectionEndIndex = value.selection.end;
-    String manipulatedText;
-    TextSelection manipulatedSelection;
-    if (selectionStartIndex < 0 || selectionEndIndex < 0) {
-      manipulatedText = substringManipulation(value.text);
-    } else {
-      final String beforeSelection =
-          substringManipulation(value.text.substring(0, selectionStartIndex));
-      final String inSelection = substringManipulation(
-          value.text.substring(selectionStartIndex, selectionEndIndex));
-      final String afterSelection =
-          substringManipulation(value.text.substring(selectionEndIndex));
-      manipulatedText = beforeSelection + inSelection + afterSelection;
-      if (value.selection.baseOffset > value.selection.extentOffset) {
-        manipulatedSelection = value.selection.copyWith(
-          baseOffset: beforeSelection.length + inSelection.length,
-          extentOffset: beforeSelection.length,
-        );
-      } else {
-        manipulatedSelection = value.selection.copyWith(
-          baseOffset: beforeSelection.length,
-          extentOffset: beforeSelection.length + inSelection.length,
-        );
-      }
-    }
-    return TextEditingValue(
-      text: manipulatedText,
-      selection:
-          manipulatedSelection ?? const TextSelection.collapsed(offset: -1),
-      composing:
-          manipulatedText == value.text ? value.composing : TextRange.empty,
-    );
+  String firstLetterToUpperCase(String input) {
+    if (input == null || input.length == 0) return input;
+    print('to uppercase');
+    String firstLetter = input[0].toUpperCase();
+    String upperCaseFirstLetter = input.replaceRange(0, 1, firstLetter);
+    print('uppercased: $upperCaseFirstLetter');
+    return upperCaseFirstLetter;
+  }
+
+  @override
+  //TODO make authorize special char programmable via authorized list
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
+    String input = newValue.text.trimLeft();
+
+    if (input.length == 0) return TextEditingValue(text: input);
+
+    String upperCaseFirstLetter = firstLetterToUpperCase(input);
+
+    if (!input.contains(' ') && !input.contains('-'))
+      return TextEditingValue(text: upperCaseFirstLetter);
+
+    // TODO pass char list i.o hard code chars
+    String formattedName = upperCaseFirstLetter;
+    if (input.contains(' '))
+      formattedName = uppercaseAfterSpecialChar(formattedName, ' ');
+    if (input.contains('-'))
+      formattedName = uppercaseAfterSpecialChar(formattedName, '-');
+    return TextEditingValue(text: formattedName);
   }
 }
