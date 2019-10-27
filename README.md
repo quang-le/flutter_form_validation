@@ -15,9 +15,9 @@ regexp for email format validation taken from [validators package](https://pub.d
 
 [X] email format validation
 
-[] First name format 
+[X] First name format 
 
-[] First name validation
+[X] First name validation
 
 [] Last name format
  
@@ -41,4 +41,4 @@ regexp for email format validation taken from [validators package](https://pub.d
 
 # known bugs 
 
-custom input formatters cause cursor to remain at start of text
+[X] custom input formatters cause cursor to remain at start of text
