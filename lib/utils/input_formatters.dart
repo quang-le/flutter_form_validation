@@ -6,12 +6,18 @@ import 'package:flutter/services.dart';
 class NameInputFormatter extends TextInputFormatter {
   final List<String> keepLowerCase;
 
-  NameInputFormatter({this.keepLowerCase = const []});
+  NameInputFormatter({
+    this.keepLowerCase = const [],
+  }) {
+    exceptions = _partialParticleMatches(keepLowerCase);
+  }
 
-  List<String> _partialParticleMatches(List<String> exceptions) {
+  List<String> exceptions;
+
+  List<String> _partialParticleMatches(List<String> keepLowerCase) {
     List<String> partialMatches = [];
 
-    exceptions.forEach((particle) {
+    keepLowerCase.forEach((particle) {
       List<String> particleSubstrings = _generateParticleSubstrings(particle);
       partialMatches.addAll(particleSubstrings);
     });
@@ -35,7 +41,12 @@ class NameInputFormatter extends TextInputFormatter {
 
     List<String> parts = input.split(specialChar);
     List<String> transformed = List<String>.from(parts.map((part) {
-      if (!exceptions.contains(part)) return firstLetterToUpperCase(part);
+      if (part.length >= 2) {
+        if (!exceptions.contains(part) && part[1] != "’")
+          return firstLetterToUpperCase(part);
+      } else if (!exceptions.contains(part)) {
+        return firstLetterToUpperCase(part);
+      }
       return part;
     }));
     String result = transformed.join(specialChar);
@@ -51,14 +62,12 @@ class NameInputFormatter extends TextInputFormatter {
 
   @override
   //TODO make authorize special char programmable via authorized list
+
   TextEditingValue formatEditUpdate(
       TextEditingValue oldValue, TextEditingValue newValue) {
     String input = newValue.text.trimLeft();
 
     if (input.length == 0) return TextEditingValue(text: input);
-    List<String> exceptions = [];
-    if (keepLowerCase.length > 0)
-      exceptions = _partialParticleMatches(keepLowerCase);
 
     if (!input.contains(' ') &&
         !input.contains('-') &&
@@ -70,15 +79,15 @@ class NameInputFormatter extends TextInputFormatter {
 
     // TODO pass char list i.o hard code chars
     String formattedName = input;
-    if (input.contains(' '))
-      formattedName =
-          uppercaseAfterSpecialChar(formattedName, ' ', exceptions: exceptions);
     if (input.contains('-'))
       formattedName =
           uppercaseAfterSpecialChar(formattedName, '-', exceptions: exceptions);
     if (input.contains("’"))
       formattedName =
           uppercaseAfterSpecialChar(formattedName, "’", exceptions: exceptions);
+    if (input.contains(' '))
+      formattedName =
+          uppercaseAfterSpecialChar(formattedName, ' ', exceptions: exceptions);
     return TextEditingValue(text: formattedName);
   }
 }
