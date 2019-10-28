@@ -1,4 +1,6 @@
-import 'package:filters/functions/convert.dart';
+import 'package:filters/utils/helpers.dart';
+import 'package:filters/utils/input_formatters.dart';
+import 'package:filters/utils/validate.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -120,7 +122,7 @@ class _DateFieldState extends State<DateField> {
       },
       controller: _controller,
       onChanged: (value) {
-        Convert.placeCursorAtEndOfText(value, _controller);
+        TextHelpers.placeCursorAtEndOfText(value, _controller);
       },
       // keep original widget options
       initialValue: widget.initialValue,
@@ -159,12 +161,12 @@ class _DateFieldState extends State<DateField> {
 
   String _validator(String value) {
     String formattedForParsing =
-        Convert.formatStringForParsing(value, widget.format);
+        Validate.formatStringForParsing(value, widget.format);
     if (formattedForParsing == null) return widget.formatError;
     String dateAndMonthValuesInRange =
-        Convert.checkDateStringFormatting(formattedForParsing);
+        Validate.checkDateStringFormatting(formattedForParsing);
     if (dateAndMonthValuesInRange == null) return widget.dateNotInRange;
-    DateTime date = Convert.toDate(dateAndMonthValuesInRange);
+    DateTime date = Validate.toDate(dateAndMonthValuesInRange);
     if (date != null) {
       setState(() {
         data = date;

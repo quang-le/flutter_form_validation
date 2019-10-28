@@ -1,6 +1,5 @@
-import 'dart:ffi';
-
-import 'package:filters/functions/convert.dart';
+import 'package:filters/utils/helpers.dart';
+import 'package:filters/utils/input_formatters.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -113,7 +112,7 @@ class _FirstNameFieldState extends State<FirstNameField> {
       keyboardType: TextInputType.text,
       inputFormatters: [
         BlacklistingTextInputFormatter(forbiddenChars),
-        FirstNameInputValidator(),
+        FirstNameInputFormatter(),
       ],
       onSaved: (value) {
         widget.saveData(data);
@@ -122,7 +121,7 @@ class _FirstNameFieldState extends State<FirstNameField> {
       validator: widget.validator ?? _validator,
       controller: _controller,
       onChanged: (value) {
-        Convert.placeCursorAtEndOfText(value, _controller);
+        TextHelpers.placeCursorAtEndOfText(value, _controller);
       },
 
       // keep original widget options

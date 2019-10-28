@@ -1,4 +1,6 @@
-import 'package:filters/functions/convert.dart';
+import 'package:filters/utils/helpers.dart';
+import 'package:filters/utils/input_formatters.dart';
+import 'package:filters/utils/validate.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -115,7 +117,7 @@ class _EmailFieldState extends State<EmailField> {
       },
       controller: _controller,
       onChanged: (value) {
-        Convert.placeCursorAtEndOfText(value, _controller);
+        TextHelpers.placeCursorAtEndOfText(value, _controller);
       },
       // keep original widget options
       initialValue: widget.initialValue,
@@ -153,7 +155,7 @@ class _EmailFieldState extends State<EmailField> {
   }
 
   String _validator(String value) {
-    bool isValid = Convert.isValidEmail(value);
+    bool isValid = Validate.isValidEmail(value);
 
     if (isValid) {
       setState(() {
