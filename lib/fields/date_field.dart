@@ -111,6 +111,12 @@ class _DateFieldState extends State<DateField> {
   }
 
   @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return TextFormField(
       key: widget.formKey,

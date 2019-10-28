@@ -106,6 +106,12 @@ class _EmailFieldState extends State<EmailField> {
   }
 
   @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return TextFormField(
       key: widget.formKey,
