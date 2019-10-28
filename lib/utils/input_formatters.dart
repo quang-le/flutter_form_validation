@@ -2,25 +2,50 @@ import 'package:filters/utils/sanitize.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class FirstNameInputFormatter extends TextInputFormatter {
-  String uppercaseAfterSpecialChar(String input, String specialChar) {
+// TODO note in README how to handle belgian vs dutch tussenvoegsels and other ambiguous words
+class NameInputFormatter extends TextInputFormatter {
+  final List<String> keepLowerCase;
+
+  NameInputFormatter({this.keepLowerCase = const []});
+
+  List<String> _partialParticleMatches(List<String> exceptions) {
+    List<String> partialMatches = [];
+
+    exceptions.forEach((particle) {
+      List<String> particleSubstrings = _generateParticleSubstrings(particle);
+      partialMatches.addAll(particleSubstrings);
+    });
+    return partialMatches;
+  }
+
+  List<String> _generateParticleSubstrings(String particle) {
+    List<String> particleSubstrings = [];
+    List<String> particleLetters = particle.split('');
+    for (int i = particleLetters.length; i >= 1; i--) {
+      String substring = particleLetters.sublist(0, i).join();
+      particleSubstrings.add(substring);
+    }
+    return particleSubstrings;
+  }
+
+  String uppercaseAfterSpecialChar(String input, String specialChar,
+      {List<String> exceptions = const []}) {
     if (input == null || input.length == 0) return input;
     if (!input.contains(specialChar)) return input;
 
     List<String> parts = input.split(specialChar);
-    List<String> transformed =
-        List<String>.from(parts.map((part) => firstLetterToUpperCase(part)));
+    List<String> transformed = List<String>.from(parts.map((part) {
+      if (!exceptions.contains(part)) return firstLetterToUpperCase(part);
+      return part;
+    }));
     String result = transformed.join(specialChar);
-    print('result: $result');
     return result;
   }
 
   String firstLetterToUpperCase(String input) {
     if (input == null || input.length == 0) return input;
-    print('to uppercase');
     String firstLetter = input[0].toUpperCase();
     String upperCaseFirstLetter = input.replaceRange(0, 1, firstLetter);
-    print('uppercased: $upperCaseFirstLetter');
     return upperCaseFirstLetter;
   }
 
@@ -31,8 +56,14 @@ class FirstNameInputFormatter extends TextInputFormatter {
     String input = newValue.text.trimLeft();
 
     if (input.length == 0) return TextEditingValue(text: input);
+    List<String> exceptions = [];
+    if (keepLowerCase.length > 0)
+      exceptions = _partialParticleMatches(keepLowerCase);
 
-    if (!input.contains(' ') && !input.contains('-')) {
+    if (!input.contains(' ') &&
+        !input.contains('-') &&
+        !input.contains("’") &&
+        !exceptions.contains(input)) {
       String upperCaseFirstLetter = firstLetterToUpperCase(input);
       return TextEditingValue(text: upperCaseFirstLetter);
     }
@@ -40,9 +71,14 @@ class FirstNameInputFormatter extends TextInputFormatter {
     // TODO pass char list i.o hard code chars
     String formattedName = input;
     if (input.contains(' '))
-      formattedName = uppercaseAfterSpecialChar(formattedName, ' ');
+      formattedName =
+          uppercaseAfterSpecialChar(formattedName, ' ', exceptions: exceptions);
     if (input.contains('-'))
-      formattedName = uppercaseAfterSpecialChar(formattedName, '-');
+      formattedName =
+          uppercaseAfterSpecialChar(formattedName, '-', exceptions: exceptions);
+    if (input.contains("’"))
+      formattedName =
+          uppercaseAfterSpecialChar(formattedName, "’", exceptions: exceptions);
     return TextEditingValue(text: formattedName);
   }
 }

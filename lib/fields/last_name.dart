@@ -3,7 +3,7 @@ import 'package:filters/utils/input_formatters.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class FirstNameField extends StatefulWidget {
+class LastNameField extends StatefulWidget {
   // must have a String argument
   final Function saveData;
   final String errorMessage;
@@ -46,7 +46,7 @@ class FirstNameField extends StatefulWidget {
   final bool enableInteractiveSelection;
   final InputCounterWidgetBuilder buildCounter;
 
-  const FirstNameField({
+  const LastNameField({
     Key key,
     @required this.saveData,
     this.focusNode,
@@ -88,10 +88,10 @@ class FirstNameField extends StatefulWidget {
   })  : assert(saveData != null),
         super(key: key);
   @override
-  _FirstNameFieldState createState() => _FirstNameFieldState();
+  _LastNameFieldState createState() => _LastNameFieldState();
 }
 
-class _FirstNameFieldState extends State<FirstNameField> {
+class _LastNameFieldState extends State<LastNameField> {
   // Save input as String in state
   String data;
   //RegExp forbiddenChars = RegExp(
@@ -112,7 +112,7 @@ class _FirstNameFieldState extends State<FirstNameField> {
       keyboardType: TextInputType.text,
       inputFormatters: [
         BlacklistingTextInputFormatter(forbiddenChars),
-        NameInputFormatter(),
+        NameInputFormatter(keepLowerCase: TextHelpers.nameParticles()),
       ],
       onSaved: (value) {
         widget.saveData(data);

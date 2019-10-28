@@ -19,9 +19,9 @@ regexp for email format validation taken from [validators package](https://pub.d
 
 [X] First name validation
 
-[] Last name format
+[X] Last name format
  
-[] Last name validation
+[X] Last name validation
 
 [] phone number format
 

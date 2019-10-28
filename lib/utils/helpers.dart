@@ -26,4 +26,60 @@ class TextHelpers {
       ..selection = TextSelection.collapsed(offset: controller.text.length);
     return;
   }
+
+  static RegExp namesRegExp() {
+    return RegExp(
+        r'[0-9"&(§!)°_$*€^¨%£`\/\\;\.,?@#<>≤=+≠÷…∞}ø¡«¶{‘“•®†ºµ¬ﬁ‡‹≈©◊~|´„”\[»\]™ª∏¥‰≥›√ı¿±:]+');
+  }
+
+  static List<String> nameParticles() {
+    List<String> list = [
+      //french
+      "de",
+      "du",
+      "des",
+      "d’",
+      //spanish
+      "del",
+      "la",
+      "los",
+      "las",
+      "y",
+      //portuguese
+      "a",
+      "da",
+      "das",
+      "do",
+      "dos",
+      //dutch
+      "den",
+      "op",
+      "t’",
+      "’t",
+      "ten",
+      "ter",
+      "te",
+      "van",
+      "vanden",
+      "den",
+      "vander",
+      //german
+      "von",
+      "aus",
+      "der",
+      "am",
+      "an",
+      "auf",
+      "im",
+      "zu",
+      "zum",
+      "zur",
+      //english
+      "of",
+      //scandinavian languages
+      "af",
+      "av",
+    ];
+    return list;
+  }
 }
