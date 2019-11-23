@@ -1,4 +1,5 @@
 import 'package:filters/fields/date_field.dart';
+import 'package:filters/fields/date_field_extended.dart';
 import 'package:filters/fields/email_field.dart';
 import 'package:filters/fields/first_name.dart';
 import 'package:filters/fields/last_name.dart';
@@ -34,6 +35,10 @@ class _FullFormState extends State<FullForm> {
             decoration: InputDecoration(labelText: 'Email'),
             saveData: _saveEmail,
           ),
+          DateFieldExtended(
+            focusNode: FocusNode(),
+          ),
+          TextFormField(),
           RaisedButton(
             child: Text('Submit'),
             onPressed: () {

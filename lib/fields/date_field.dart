@@ -8,9 +8,10 @@ class DateField extends StatefulWidget {
   // must have a DateTime argument
   final Function saveData;
   final String errorMessage;
-  final String dateNotInRange;
+  final String dateNotInRange; // move to validator mixin
   final String formatError;
-  final String format;
+  final String
+      format; // TODO find a way to handle that with constructor (create specific child class and use factory?)
   // if DateField doesn't have a Form parent, formKey is necessary
   final GlobalKey<FormFieldState> formKey;
 
@@ -49,6 +50,7 @@ class DateField extends StatefulWidget {
   final EdgeInsets scrollPadding;
   final bool enableInteractiveSelection;
   final InputCounterWidgetBuilder buildCounter;
+  // TextInputFormatter _inputFormatter=DateInputFormatter();
 
   const DateField({
     Key key,
