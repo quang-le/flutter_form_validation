@@ -3,14 +3,14 @@ import 'package:flutter/services.dart';
 
 class Convert {
   // returns null if empty/null input or parse not possible
-  static double toDouble(String str) {
+  double toDouble(String str) {
     str = str?.trim();
     if (str != null) return double.tryParse(str);
     return null;
   }
 
   // returns null if empty/null input or parse not possible
-  static int toInt(String str) {
+  int toInt(String str) {
     str = str?.trim();
     if (str != null) return int.tryParse(str);
     return null;
@@ -19,20 +19,19 @@ class Convert {
 
 class TextHelpers {
   // use with onChanged to keep cursor at end of text
-  static void placeCursorAtEndOfText(
-      String value, TextEditingController controller) {
+  void placeCursorAtEndOfText(String value, TextEditingController controller) {
     controller
       ..text = value
       ..selection = TextSelection.collapsed(offset: controller.text.length);
     return;
   }
 
-  static RegExp namesRegExp() {
+  RegExp namesRegExp() {
     return RegExp(
         r'[0-9"&(§!)°_$*€^¨%£`\/\\;\.,?@#<>≤=+≠÷…∞}ø¡«¶{‘“•®†ºµ¬ﬁ‡‹≈©◊~|´„”\[»\]™ª∏¥‰≥›√ı¿±:]+');
   }
 
-  static List<String> nameParticles() {
+  List<String> nameParticles() {
     List<String> list = [
       //french
       "de",

@@ -91,17 +91,18 @@ class FirstNameField extends StatefulWidget {
   _FirstNameFieldState createState() => _FirstNameFieldState();
 }
 
-class _FirstNameFieldState extends State<FirstNameField> {
+class _FirstNameFieldState extends State<FirstNameField> with TextHelpers {
   // Save input as String in state
   String data;
   //RegExp forbiddenChars = RegExp(
   //    r'[0-9"&(§!)°_$*€^¨%£`\/\\;\.,?@#<>≤=+≠÷…∞}ø¡«¶{‘“•®†ºµ¬ﬁ‡‹≈©◊~|´„”\[»\]™ª∏¥‰≥›√ı¿±:]+');
-  RegExp forbiddenChars = TextHelpers.namesRegExp();
+  RegExp forbiddenChars;
   TextEditingController _controller;
 
   @override
   void initState() {
     _controller = widget.controller ?? TextEditingController();
+    forbiddenChars = namesRegExp();
     super.initState();
   }
 
@@ -127,7 +128,7 @@ class _FirstNameFieldState extends State<FirstNameField> {
       validator: widget.validator ?? _validator,
       controller: _controller,
       onChanged: (value) {
-        TextHelpers.placeCursorAtEndOfText(value, _controller);
+        placeCursorAtEndOfText(value, _controller);
       },
 
       // keep original widget options

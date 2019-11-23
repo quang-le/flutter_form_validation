@@ -92,12 +92,12 @@ class NameInputFormatter extends TextInputFormatter {
   }
 }
 
-class EmailInputFormatter extends TextInputFormatter {
+class EmailInputFormatter extends TextInputFormatter with Sanitize {
   @override
   TextEditingValue formatEditUpdate(
       TextEditingValue oldValue, TextEditingValue newValue) {
     String trimmed = newValue.text.trim();
-    String sanitized = Sanitize.htmlCharsDelete(trimmed);
+    String sanitized = htmlCharsDelete(trimmed);
     return TextEditingValue(text: sanitized);
   }
 }

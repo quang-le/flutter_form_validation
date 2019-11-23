@@ -98,7 +98,7 @@ class DateField extends StatefulWidget {
   _DateFieldState createState() => _DateFieldState();
 }
 
-class _DateFieldState extends State<DateField> {
+class _DateFieldState extends State<DateField> with TextHelpers, Validate {
   // Save input as DateTime in state
   DateTime data;
   TextEditingController _controller;
@@ -128,7 +128,7 @@ class _DateFieldState extends State<DateField> {
       },
       controller: _controller,
       onChanged: (value) {
-        TextHelpers.placeCursorAtEndOfText(value, _controller);
+        placeCursorAtEndOfText(value, _controller);
       },
       // keep original widget options
       initialValue: widget.initialValue,
@@ -166,8 +166,7 @@ class _DateFieldState extends State<DateField> {
   }
 
   String _validator(String value) {
-    String formattedForParsing =
-        Validate.formatStringForParsing(value, widget.format);
+    String formattedForParsing = formatStringForParsing(value, widget.format);
     if (formattedForParsing == null) return widget.formatError;
     String dateAndMonthValuesInRange =
         Validate.checkDateStringFormatting(formattedForParsing);

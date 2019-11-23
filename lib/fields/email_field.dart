@@ -93,7 +93,7 @@ class EmailField extends StatefulWidget {
   _EmailFieldState createState() => _EmailFieldState();
 }
 
-class _EmailFieldState extends State<EmailField> {
+class _EmailFieldState extends State<EmailField> with TextHelpers, Validate {
   // Save input as String in state
   String data;
   TextEditingController _controller;
@@ -123,7 +123,7 @@ class _EmailFieldState extends State<EmailField> {
       },
       controller: _controller,
       onChanged: (value) {
-        TextHelpers.placeCursorAtEndOfText(value, _controller);
+        placeCursorAtEndOfText(value, _controller);
       },
       // keep original widget options
       initialValue: widget.initialValue,
@@ -161,7 +161,7 @@ class _EmailFieldState extends State<EmailField> {
   }
 
   String _validator(String value) {
-    bool isValid = Validate.isValidEmail(value);
+    bool isValid = isValidEmail(value);
 
     if (isValid) {
       setState(() {
