@@ -102,7 +102,7 @@ class _FirstNameFieldState extends State<FirstNameField> with TextHelpers {
   @override
   void initState() {
     _controller = widget.controller ?? TextEditingController();
-    forbiddenChars = namesRegExp();
+    forbiddenChars = TextHelpers.namesRegExp();
     super.initState();
   }
 

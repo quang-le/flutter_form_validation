@@ -161,7 +161,7 @@ class _EmailFieldState extends State<EmailField> with TextHelpers, Validate {
   }
 
   String _validator(String value) {
-    bool isValid = isValidEmail(value);
+    bool isValid = Validate.isValidEmail(value);
 
     if (isValid) {
       setState(() {

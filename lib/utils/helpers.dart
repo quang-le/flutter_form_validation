@@ -26,12 +26,12 @@ class TextHelpers {
     return;
   }
 
-  RegExp namesRegExp() {
+  static RegExp namesRegExp() {
     return RegExp(
         r'[0-9"&(§!)°_$*€^¨%£`\/\\;\.,?@#<>≤=+≠÷…∞}ø¡«¶{‘“•®†ºµ¬ﬁ‡‹≈©◊~|´„”\[»\]™ª∏¥‰≥›√ı¿±:]+');
   }
 
-  List<String> nameParticles() {
+  static List<String> nameParticles() {
     List<String> list = [
       //french
       "de",

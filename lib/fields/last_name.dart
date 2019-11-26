@@ -102,7 +102,7 @@ class _LastNameFieldState extends State<LastNameField> with TextHelpers {
   @override
   void initState() {
     _controller = widget.controller ?? TextEditingController();
-    forbiddenChars = namesRegExp();
+    forbiddenChars = TextHelpers.namesRegExp();
     super.initState();
   }
 
@@ -119,7 +119,7 @@ class _LastNameFieldState extends State<LastNameField> with TextHelpers {
       keyboardType: TextInputType.text,
       inputFormatters: [
         BlacklistingTextInputFormatter(forbiddenChars),
-        NameInputFormatter(keepLowerCase: nameParticles()),
+        NameInputFormatter(keepLowerCase: TextHelpers.nameParticles()),
       ],
       onSaved: (value) {
         widget.saveData(data);
