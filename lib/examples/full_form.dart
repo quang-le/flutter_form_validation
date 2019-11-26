@@ -1,8 +1,9 @@
 import 'package:filters/fields/date_field.dart';
-import 'package:filters/fields/date_field_extended.dart';
+import 'package:filters/fields/field.dart';
 import 'package:filters/fields/email_field.dart';
 import 'package:filters/fields/first_name.dart';
 import 'package:filters/fields/last_name.dart';
+import 'package:filters/utils/validate.dart';
 import 'package:flutter/material.dart';
 
 class FullForm extends StatefulWidget {
@@ -19,7 +20,7 @@ class _FullFormState extends State<FullForm> {
       key: _formKey,
       child: Column(
         children: <Widget>[
-          FirstNameField(
+          /*FirstNameField(
             decoration: InputDecoration(labelText: 'First Name'),
             saveData: _saveFirstName,
           ),
@@ -34,9 +35,15 @@ class _FullFormState extends State<FullForm> {
           EmailField(
             decoration: InputDecoration(labelText: 'Email'),
             saveData: _saveEmail,
-          ),
-          DateFieldExtended(
-            focusNode: FocusNode(),
+          ),*/
+          Field.date(
+            keyboardAppearance: Brightness.light,
+            decoration: InputDecoration(labelText: 'test widget'),
+            onSaved: (value) {
+              print(value);
+            },
+            validator:
+                Validate.customDateValidator('eur', 'prout', 'caca', 'boudin'),
           ),
           TextFormField(),
           RaisedButton(
@@ -58,9 +65,9 @@ class _FullFormState extends State<FullForm> {
     return;
   }
 
-  void _saveEmail(String email) {
+  String _saveEmail(String email) {
     print('email entered is $email');
-    return;
+    return email;
   }
 
   void _saveFirstName(String firstName) {

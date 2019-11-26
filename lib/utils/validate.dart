@@ -7,7 +7,7 @@ class Validate {
   }
 
   // format string to use with DateTime.parse. default is dd/mm/yyyy
-  String formatStringForParsing(String str, String format) {
+  static String formatStringForParsing(String str, String format) {
     if (str.length != 10) return null;
     String dateString;
     if (format == 'us') {
@@ -63,5 +63,38 @@ class Validate {
     }
 
     return date;
+  }
+
+  static String dateValidator(String value) {
+    String formattedForParsing = Validate.formatStringForParsing(value, 'eur');
+    if (formattedForParsing == null) return 'Format Error';
+    String dateAndMonthValuesInRange =
+        Validate.checkDateStringFormatting(formattedForParsing);
+    if (dateAndMonthValuesInRange == null) return 'Date not in range';
+    DateTime date = Validate.toDate(dateAndMonthValuesInRange);
+    if (date != null) {
+      return null;
+    }
+    return 'Please use dd/mm/yyyy format';
+  }
+
+  // Allow users to use built-in validator with custom messages and format(EUR vs US)
+  static Function customDateValidator(String dateFormat, String formatErrorMsg,
+      String dateNotInRangeErrorMsg, String dateErrorMsg) {
+    String customDateValidator(String value) {
+      String formattedForParsing =
+          Validate.formatStringForParsing(value, dateFormat);
+      if (formattedForParsing == null) return formatErrorMsg;
+      String dateAndMonthValuesInRange =
+          Validate.checkDateStringFormatting(formattedForParsing);
+      if (dateAndMonthValuesInRange == null) return dateNotInRangeErrorMsg;
+      DateTime date = Validate.toDate(dateAndMonthValuesInRange);
+      if (date != null) {
+        return null;
+      }
+      return dateErrorMsg;
+    }
+
+    return customDateValidator;
   }
 }

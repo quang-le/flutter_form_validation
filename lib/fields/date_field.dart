@@ -168,7 +168,8 @@ class _DateFieldState extends State<DateField> with TextHelpers, Validate {
   }
 
   String _validator(String value) {
-    String formattedForParsing = formatStringForParsing(value, widget.format);
+    String formattedForParsing =
+        Validate.formatStringForParsing(value, widget.format);
     if (formattedForParsing == null) return widget.formatError;
     String dateAndMonthValuesInRange =
         Validate.checkDateStringFormatting(formattedForParsing);

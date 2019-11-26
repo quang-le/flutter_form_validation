@@ -42,3 +42,4 @@ regexp for email format validation taken from [validators package](https://pub.d
 # known bugs 
 
 [X] custom input formatters cause cursor to remain at start of text
+
