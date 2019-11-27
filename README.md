@@ -47,7 +47,7 @@ regexp for email format validation taken from [validators package](https://pub.d
 
 [X] Refactor has broken cursor positioning
 
-#Current features
+# Current features
 
 Everything is implemented in a class called `Field` which extends `TextFormField`. There is a named constructor for each specific field (e.g.: `Field.email`). 
 Each constructor provides a default value for `inputFormatter` and `validator`. Apart from that, `Field` can be used just like `TextFormField`.
@@ -65,4 +65,5 @@ To use the default `inputFormatters` but with custom error messages, use the ad-
 # Log
 
 26/11/2019: Refactor first name, last name, email and date fields to use inheritance for cleaner code. Used named constructors i.o. separated widgets. On the minus side: the `controller` field is now mandatory to avoid erratic cursor behavior.
+
 *Learnings*: use of high-order functions (to allow users to still use onChanged Field), inheritance in Dart
