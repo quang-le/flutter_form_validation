@@ -1,4 +1,4 @@
-import 'package:filters/fields/date_field.dart';
+import 'package:filters/fields/field.dart';
 import 'package:flutter/material.dart';
 
 class EmailOnly extends StatefulWidget {
@@ -16,10 +16,12 @@ class _EmailOnlyState extends State<EmailOnly> {
     return SafeArea(
         child: Column(
       children: <Widget>[
-        DateField(
-          decoration: InputDecoration(labelText: 'Date'),
-          formKey: formKey,
-          saveData: _saveEmail,
+        Field.email(
+          decoration: InputDecoration(labelText: 'Email'),
+          controller: TextEditingController(),
+          onSaved: (value) {
+            print(value);
+          },
         ),
         Spacer(flex: 1),
         RaisedButton(

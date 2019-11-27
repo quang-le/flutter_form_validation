@@ -1,4 +1,5 @@
-import 'package:filters/fields/date_field.dart';
+import 'package:filters/fields/field.dart';
+import 'package:filters/utils/validate.dart';
 import 'package:flutter/material.dart';
 
 class DateOnly extends StatefulWidget {
@@ -16,10 +17,15 @@ class _DateOnlyState extends State<DateOnly> {
     return SafeArea(
         child: Column(
       children: <Widget>[
-        DateField(
+        Field.date(
           decoration: InputDecoration(labelText: 'Date'),
-          formKey: formKey,
-          saveData: _saveDate,
+          controller: TextEditingController(),
+          onSaved: (value) {
+            print(value);
+          },
+          validator: Validate.customDateValidator('eur',
+              dateErrorMsg: 'custom error message',
+              dateNotInRangeErrorMsg: 'custom msg date not in range'),
         ),
         Spacer(flex: 1),
         RaisedButton(
@@ -34,15 +40,5 @@ class _DateOnlyState extends State<DateOnly> {
         ),
       ],
     ));
-  }
-
-  DateTime _saveDate(DateTime fieldValue) {
-    DateTime date = fieldValue;
-    print('date saved : $date');
-    setState(() {
-      testDate = date;
-    });
-    print('state date : $testDate');
-    return date;
   }
 }
