@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 class Validate {
   static bool isValidEmail(String str) {
     RegExp _email = RegExp(
@@ -77,12 +79,13 @@ class Validate {
   }
 
   // Allow users to use built-in validator with custom messages and format(EUR vs US)
-  static Function customDateValidator(String dateFormat, String formatErrorMsg,
-      String dateNotInRangeErrorMsg, String dateErrorMsg) {
+  static Function customDateValidator(String dateFormat,
+      {@required String dateNotInRangeErrorMsg,
+      @required String dateErrorMsg}) {
     String customDateValidator(String value) {
       String formattedForParsing =
           Validate.formatStringForParsing(value, dateFormat);
-      if (formattedForParsing == null) return formatErrorMsg;
+      if (formattedForParsing == null) return dateErrorMsg;
       String dateAndMonthValuesInRange =
           Validate.checkDateStringFormatting(formattedForParsing);
       if (dateAndMonthValuesInRange == null) return dateNotInRangeErrorMsg;
