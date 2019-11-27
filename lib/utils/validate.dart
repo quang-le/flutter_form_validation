@@ -61,7 +61,6 @@ class Validate {
       print('error parsing date: $e');
       return null;
     }
-
     return date;
   }
 
@@ -72,9 +71,8 @@ class Validate {
         Validate.checkDateStringFormatting(formattedForParsing);
     if (dateAndMonthValuesInRange == null) return 'Date not in range';
     DateTime date = Validate.toDate(dateAndMonthValuesInRange);
-    if (date != null) {
-      return null;
-    }
+    if (date != null) return null;
+
     return 'Please use dd/mm/yyyy format';
   }
 
@@ -89,9 +87,8 @@ class Validate {
           Validate.checkDateStringFormatting(formattedForParsing);
       if (dateAndMonthValuesInRange == null) return dateNotInRangeErrorMsg;
       DateTime date = Validate.toDate(dateAndMonthValuesInRange);
-      if (date != null) {
-        return null;
-      }
+      if (date != null) return null;
+
       return dateErrorMsg;
     }
 
@@ -106,9 +103,7 @@ class Validate {
 
   static String email(String value) {
     bool isValid = isValidEmail(value);
-
     if (isValid) return null;
-
     return 'please enter valid email';
   }
 }

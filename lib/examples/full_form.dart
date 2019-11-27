@@ -3,6 +3,7 @@ import 'package:filters/fields/field.dart';
 import 'package:filters/fields/email_field.dart';
 import 'package:filters/fields/first_name.dart';
 import 'package:filters/fields/last_name.dart';
+import 'package:filters/utils/input_formatters.dart';
 import 'package:filters/utils/validate.dart';
 import 'package:flutter/material.dart';
 
@@ -20,32 +21,39 @@ class _FullFormState extends State<FullForm> {
       key: _formKey,
       child: Column(
         children: <Widget>[
-          /*FirstNameField(
+          Field.firstName(
             decoration: InputDecoration(labelText: 'First Name'),
-            saveData: _saveFirstName,
+            controller: TextEditingController(),
+            onSaved: (value) {
+              print(value);
+            },
           ),
-          LastNameField(
+          Field.lastName(
             decoration: InputDecoration(labelText: 'Last Name'),
-            saveData: _saveLastName,
+            controller: TextEditingController(),
+            onSaved: (value) {
+              print(value);
+            },
           ),
-          DateField(
-            decoration: InputDecoration(labelText: 'Date'),
-            saveData: _saveDate,
-          ),
-          EmailField(
+          Field.email(
             decoration: InputDecoration(labelText: 'Email'),
-            saveData: _saveEmail,
-          ),*/
+            controller: TextEditingController(),
+            onSaved: (value) {
+              print(value);
+            },
+            onChanged: (value) {
+              print(value);
+            },
+          ),
           Field.date(
-            keyboardAppearance: Brightness.light,
-            decoration: InputDecoration(labelText: 'test widget'),
+            decoration: InputDecoration(labelText: 'Date'),
+            controller: TextEditingController(),
             onSaved: (value) {
               print(value);
             },
             validator:
                 Validate.customDateValidator('eur', 'prout', 'caca', 'boudin'),
           ),
-          TextFormField(),
           RaisedButton(
             child: Text('Submit'),
             onPressed: () {
@@ -65,7 +73,7 @@ class _FullFormState extends State<FullForm> {
     return;
   }
 
-  String _saveEmail(String email) {
+  /*String _saveEmail(String email) {
     print('email entered is $email');
     return email;
   }
@@ -78,5 +86,5 @@ class _FullFormState extends State<FullForm> {
   void _saveLastName(String lastName) {
     print('last name entered is $lastName');
     return;
-  }
+  }*/
 }

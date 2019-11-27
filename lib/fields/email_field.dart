@@ -123,7 +123,7 @@ class _EmailFieldState extends State<EmailField> with TextHelpers, Validate {
       },
       controller: _controller,
       onChanged: (value) {
-        placeCursorAtEndOfText(value, _controller);
+        TextHelpers.placeCursorAtEndOfText(value, _controller);
       },
       // keep original widget options
       initialValue: widget.initialValue,

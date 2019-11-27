@@ -19,11 +19,22 @@ class Convert {
 
 class TextHelpers {
   // use with onChanged to keep cursor at end of text
-  void placeCursorAtEndOfText(String value, TextEditingController controller) {
+  static void placeCursorAtEndOfText(
+      String value, TextEditingController controller) {
     controller
       ..text = value
       ..selection = TextSelection.collapsed(offset: controller.text.length);
     return;
+  }
+
+  static Function onChanged(TextEditingController controller,
+      [Function onChanged(String value)]) {
+    void change(String value) {
+      onChanged(value);
+      placeCursorAtEndOfText(value, controller);
+    }
+
+    return change;
   }
 
   static RegExp namesRegExp() {

@@ -128,7 +128,7 @@ class _LastNameFieldState extends State<LastNameField> with TextHelpers {
       validator: widget.validator ?? _validator,
       controller: _controller,
       onChanged: (value) {
-        placeCursorAtEndOfText(value, _controller);
+        TextHelpers.placeCursorAtEndOfText(value, _controller);
       },
 
       // keep original widget options
