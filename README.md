@@ -51,13 +51,10 @@ regexp for email format validation taken from [validators package](https://pub.d
 
 Everything is implemented in a class called `Field` which extends `TextFormField`. There is a named constructor for each specific field (e.g.: `Field.email`). 
 Each constructor provides a default value for `inputFormatter` and `validator`. Apart from that, `Field` can be used just like `TextFormField`.
-The default `validator` can be overriden by giving the `validator` field a value.
+The default `validator` can be overridden by giving the `validator` field a value.
 The default `inputFormatters` can be overridden the same way.
-To use the default `inputFormatters` but with custom error messages, use the ad-hoc custom validator function, e.g:
-``  validator: Validate.customDateValidator('eur',
-                dateErrorMsg: 'custom error message',
-                dateNotInRangeErrorMsg: 'custom msg date not in range'),
-          ),`` 
+To use the default `inputFormatters` but with custom error messages, use the ad-hoc custom validator function, e.g: 
+``validator: Validate.customDateValidator('eur', dateErrorMsg: 'custom error message', dateNotInRangeErrorMsg: 'custom msg date not in range'),),`` 
           
  `onChanged` should behave normally, but I use it to manage the cursor position, so any user-defined function is wrapped in another function that executes the cursor managing function after it.
 
