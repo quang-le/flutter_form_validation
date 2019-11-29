@@ -372,7 +372,7 @@ class Field extends TextFormField with Validate, TextHelpers {
     InputCounterWidgetBuilder buildCounter,
     GlobalKey formKey,
     FormFieldSetter<String> onSaved,
-    TextInputType keyboardType,
+    //TextInputType keyboardType,
     FormFieldValidator<String> validator = Validate.date,
   })  : assert(controller != null),
         super(
@@ -412,8 +412,10 @@ class Field extends TextFormField with Validate, TextHelpers {
           buildCounter: buildCounter,
           validator: validator,
           inputFormatters: [DateInputFormatter()],
-          onSaved: TextHelpers.onSaved(controller, onSaved),
-          keyboardType: keyboardType,
+          // not using html sanitizer for this field as it would interfere with parsing
+          // InputFormatter and keyboard type should prevent unwanted characters.
+          onSaved: onSaved,
+          keyboardType: TextInputType.phone,
         );
 
   // No default validator so it can be used for zip code and house/appt number.
@@ -705,7 +707,8 @@ class Field extends TextFormField with Validate, TextHelpers {
     InputCounterWidgetBuilder buildCounter,
     GlobalKey formKey,
     FormFieldSetter<String> onSaved,
-    TextInputType keyboardType = TextInputType.phone,
+    //uncomment if you want to be able to set the keyboard type
+    //TextInputType keyboardType,
     FormFieldValidator<String> validator,
   })  : assert(controller != null),
         super(
@@ -748,6 +751,6 @@ class Field extends TextFormField with Validate, TextHelpers {
             WhitelistingTextInputFormatter(TextHelpers.numbers())
           ],
           onSaved: TextHelpers.onSaved(controller, onSaved),
-          keyboardType: keyboardType,
+          keyboardType: TextInputType.phone,
         );
 }

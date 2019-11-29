@@ -7,7 +7,7 @@ import 'package:filters/widgets/phone_service.dart';
 import 'package:flutter/material.dart';
 
 class PhoneFormField extends StatefulWidget {
-  final Function onSaved;
+  final Function(String phoneNumber) onSaved;
   final String initialPhoneNumber;
   final String initialSelection;
   final String errorText;
@@ -26,7 +26,7 @@ class PhoneFormField extends StatefulWidget {
       this.hintStyle,
       this.errorMaxLines});
 
-  // tgis func for test purposes
+  // this func for test purposes
   static Future<String> internationalizeNumber(String number, String iso) {
     return PhoneService.getNormalizedPhoneNumber(number, iso);
   }
@@ -55,7 +55,6 @@ class _PhoneFormFieldState extends State<PhoneFormField> {
 
   @override
   void initState() {
-    //phoneTextController.addListener(() => print('ha'));
     phoneTextController.text = widget.initialPhoneNumber;
 
     _fetchCountryData().then((list) {
@@ -77,32 +76,8 @@ class _PhoneFormFieldState extends State<PhoneFormField> {
         selectedItem = preSelectedItem;
       });
     });
-
     super.initState();
   }
-
-  /* _validatePhoneNumber() {
-    String phoneText = phoneTextController.text;
-    if (phoneText != null && phoneText.isNotEmpty) {
-      PhoneService.parsePhoneNumber(phoneText, selectedItem.code)
-          .then((isValid) {
-        setState(() {
-          hasError = !isValid;
-        });
-
-        if (widget.onPhoneNumberChange != null) {
-          if (isValid) {
-            PhoneService.getNormalizedPhoneNumber(phoneText, selectedItem.code)
-                .then((number) {
-              widget.onPhoneNumberChange(phoneText, number, selectedItem.code);
-            });
-          } else {
-            widget.onPhoneNumberChange('', '', selectedItem.code);
-          }
-        }
-      });
-    }
-  }*/
 
   Future<List<Country>> _fetchCountryData() async {
     var list = await DefaultAssetBundle.of(context)
@@ -122,48 +97,50 @@ class _PhoneFormFieldState extends State<PhoneFormField> {
 
   @override
   Widget build(BuildContext context) {
+    ThemeData theme = Theme.of(context);
     return Container(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.end,
         children: <Widget>[
-          DropdownButtonHideUnderline(
-            child: Padding(
-              padding: EdgeInsets.only(top: 8),
-              child: DropdownButton<Country>(
-                value: selectedItem,
-                onChanged: (Country newValue) {
-                  setState(() {
-                    selectedItem = newValue;
-                  });
-                },
-                items: itemList.map<DropdownMenuItem<Country>>((Country value) {
-                  return DropdownMenuItem<Country>(
-                    value: value,
-                    child: Container(
-                      padding: const EdgeInsets.only(bottom: 5.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: <Widget>[
-                          Image(
-                              image: AssetImage(
-                                value.flagUri,
-                              ),
-                              width: 32.0),
-                          SizedBox(width: 4),
-                          Text(value.dialCode)
-                        ],
-                      ),
+          Expanded(
+            flex: 1,
+            child: DropdownButtonFormField<Country>(
+              value: selectedItem,
+              onChanged: (Country newValue) {
+                setState(() {
+                  selectedItem = newValue;
+                });
+              },
+              items: itemList.map<DropdownMenuItem<Country>>((Country value) {
+                return DropdownMenuItem<Country>(
+                  value: value,
+                  child: Container(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        Image(
+                            image: AssetImage(
+                              value.flagUri,
+                            ),
+                            //TODO Adjust height dynamically
+                            width: 25.0,
+                            height: 15.0),
+                        SizedBox(width: 15),
+                        Text(value.dialCode)
+                      ],
                     ),
-                  );
-                }).toList(),
-              ),
+                  ),
+                );
+              }).toList(),
             ),
           ),
-          Flexible(
+          Expanded(
+            flex: 2,
             child: Field.phone(
               controller: phoneTextController,
               decoration: InputDecoration(
-                labelText: 'phone',
+                labelText: 'Phone',
                 hintText: widget.hintText ?? 'ex: 47512345',
                 //errorText: hasError ? errorText : null,
                 hintStyle: widget.hintStyle,
@@ -172,7 +149,10 @@ class _PhoneFormFieldState extends State<PhoneFormField> {
               ),
               validator: Validate.makePhoneValidator(selectedItem?.code,
                   widget.errorText ?? 'invalid phone number'),
-              onSaved: widget.onSaved,
+              onSaved: (value) {
+                String valueToSave = selectedItem.dialCode + value;
+                widget.onSaved(valueToSave);
+              },
             ),
           )
         ],
