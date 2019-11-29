@@ -32,9 +32,9 @@ regexp for email format validation taken from [validators package](https://pub.d
  
 [] Company name validation
 
-[] phone number format
+[X] phone number format
 
-[] phone number validation (national standards)
+[X] phone number validation (national standards)
 
 [X] country format
 
