@@ -1,3 +1,4 @@
+import 'package:filters/widgets/phone_service.dart';
 import 'package:flutter/material.dart';
 
 class Validate {
@@ -98,6 +99,7 @@ class Validate {
   }
 
   static String name(String value) {
+    if (value == null || value == '') return 'Please enter name';
     if (value[0] == '-') return 'Please enter valid name';
     if (value.length < 2) return 'Please enter valid name';
     return null;
@@ -107,5 +109,23 @@ class Validate {
     bool isValid = isValidEmail(value);
     if (isValid) return null;
     return 'please enter valid email';
+  }
+
+  static String zipCode(String value) {
+    if (int.tryParse(value) != null) return value;
+    return 'please use digits only';
+  }
+
+  static Function makePhoneValidator(String countryCode, String errorMsg) {
+    String phoneValidator(String value) {
+      PhoneService.parsePhoneNumber(value, countryCode).then((isValid) {
+        if (!isValid) return errorMsg;
+        return null;
+      });
+      //TODO review this code potential async bugs
+      return null;
+    }
+
+    return phoneValidator;
   }
 }

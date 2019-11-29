@@ -1,4 +1,5 @@
 import 'package:filters/fields/field.dart';
+import 'package:filters/widgets/phone_form_field.dart';
 import 'package:flutter/material.dart';
 
 class FullForm extends StatefulWidget {
@@ -42,6 +43,11 @@ class _FullFormState extends State<FullForm> {
           Field.date(
             decoration: InputDecoration(labelText: 'Date'),
             controller: TextEditingController(),
+            onSaved: (value) {
+              print(value);
+            },
+          ),
+          PhoneFormField(
             onSaved: (value) {
               print(value);
             },

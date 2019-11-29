@@ -34,7 +34,7 @@ class NameInputFormatter extends TextInputFormatter {
     return particleSubstrings;
   }
 
-  String uppercaseAfterSpecialChar(String input, String specialChar,
+  static String uppercaseAfterSpecialChar(String input, String specialChar,
       {List<String> exceptions = const []}) {
     if (input == null || input.length == 0) return input;
     if (!input.contains(specialChar)) return input;
@@ -53,7 +53,7 @@ class NameInputFormatter extends TextInputFormatter {
     return result;
   }
 
-  String firstLetterToUpperCase(String input) {
+  static String firstLetterToUpperCase(String input) {
     if (input == null || input.length == 0) return input;
     String firstLetter = input[0].toUpperCase();
     String upperCaseFirstLetter = input.replaceRange(0, 1, firstLetter);
@@ -141,5 +141,27 @@ class DateInputFormatter extends TextInputFormatter {
       return TextEditingValue(text: filteredChars.join());
     }
     return null;
+  }
+}
+
+class CountryInputFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
+    String input = newValue.text.trimLeft();
+
+    if (input.length == 0) return TextEditingValue(text: input);
+
+    if (!input.contains(' ')) {
+      String upperCaseFirstLetter =
+          NameInputFormatter.firstLetterToUpperCase(input);
+      return TextEditingValue(text: upperCaseFirstLetter);
+    }
+
+    String formattedName = input;
+    if (input.contains(' '))
+      formattedName =
+          NameInputFormatter.uppercaseAfterSpecialChar(formattedName, ' ');
+    return TextEditingValue(text: formattedName);
   }
 }

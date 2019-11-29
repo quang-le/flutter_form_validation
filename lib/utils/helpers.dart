@@ -1,3 +1,4 @@
+import 'package:filters/utils/sanitize.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 
@@ -30,16 +31,38 @@ class TextHelpers {
   static Function onChanged(TextEditingController controller,
       [Function onChanged(String value)]) {
     void change(String value) {
-      onChanged(value);
+      if (onChanged != null) onChanged(value);
       placeCursorAtEndOfText(value, controller);
     }
 
     return change;
   }
 
+  static Function onSaved(TextEditingController controller,
+      [Function onSaved(String value)]) {
+    void save(String value) {
+      String sanitizedValue = Sanitize.htmlChars(value);
+      onSaved(sanitizedValue);
+    }
+
+    return save;
+  }
+
   static RegExp namesRegExp() {
     return RegExp(
         r'[0-9"&(§!)°_$*€^¨%£`\/\\;\.,?@#<>≤=+≠÷…∞}ø¡«¶{‘“•®†ºµ¬ﬁ‡‹≈©◊~|´„”\[»\]™ª∏¥‰≥›√ı¿±:]+');
+  }
+
+  static RegExp numbersAndLetters() {
+    return RegExp(r'[a-z0-9]*/gi');
+  }
+
+  static RegExp letters() {
+    return RegExp(r'[a-z]*/gi');
+  }
+
+  static RegExp numbers() {
+    return RegExp(r'[0-9]*');
   }
 
   static List<String> nameParticles() {

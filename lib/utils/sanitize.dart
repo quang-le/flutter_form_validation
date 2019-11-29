@@ -1,7 +1,7 @@
 class Sanitize {
-  String htmlChars(String str) {
+  static String htmlChars(String str) {
     return str
-        .replaceAll(RegExp(r'&'), '&amp;')
+        //.replaceAll(RegExp(r'&'), '&amp;')
         .replaceAll(RegExp(r'"'), '&quot;')
         .replaceAll(RegExp(r"'"), '&#x27;')
         .replaceAll(RegExp(r'<'), '&lt;')
