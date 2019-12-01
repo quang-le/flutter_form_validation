@@ -30,9 +30,9 @@ regexp for email format validation taken from [validators package](https://pub.d
  
 [X] Last name validation
 
-[] Company name format
+[X] Company name format
  
-[] Company name validation
+[X] Company name validation
 
 [X] phone number format
 
@@ -42,13 +42,6 @@ regexp for email format validation taken from [validators package](https://pub.d
 
 [] country validation: auto-fill+dropdown list
 
-[] zip code format
-
-[] zip code validation - abandoned: has to be done on a country by country basis
-
-[] address format - abandoned: too complex to deal for the scope of this project (any formatting would be mostly locale based)
-
-[] address validation - abandoned: too complex to deal for the scope of this project (same reason as formatting)
 
 # known bugs 
 
@@ -67,10 +60,14 @@ To use the default `inputFormatters` but with custom error messages, use the ad-
           
  `onChanged` should behave normally, but I use it to manage the cursor position, so any user-defined function is wrapped in another function that executes the cursor managing function after it.
 
-
+`Field.companyName` has not `inputFormatter` to allow whatever company name people can come up with. html chars are converted onSaved.
+Field.date converts user input to ISO string onSaved.
+Default date format is dd/mm/yyyy. To use mm/dd/yyyy set `dateFormat`field to `DateFormat.us` in `Field.date.
 # Log
 
 26/11/2019: Refactor first name, last name, email and date fields to use inheritance for cleaner code. Used named constructors i.o. separated widgets. On the minus side: the `controller` field is now mandatory to avoid erratic cursor behavior.
 
 
-29/11/2019: I give up on postal address format and validation, as there's too much variation from country to country or even within a country. I make a input formatter and validator for Belgium for the sake of the exercise, but I give up on the idea of having a generic solution for that field. similar idea with zip code. I will try and implement a country selector, which should make it easier to apply validators and formatters on a per country basis. 
+29/11/2019: I give up on postal address format and validation, as there's too much variation from country to country or even within a country. I make a input formatter and validator for Belgium for the sake of the exercise, but I give up on the idea of having a generic solution for that field. similar idea with zip code. I will try and implement a country selector, which should make it easier to apply validators and formatters on a per country basis.`
+
+01/12/2019: refactor `Field.date` so `onSaved`converts user input to ISO string. Give up all post address related fields, as the absence of a common format, sometimes within a country makes it too complex too implement for what I'm trying to achieve here. Moving code to another project to be able to run it as a (unpublished) package. 
