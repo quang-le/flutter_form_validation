@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 class Field extends TextFormField with Validate, TextHelpers {
   Field.textForm(
       {Key key,
+      this.dateFormat = DateFormat.eur,
       FocusNode focusNode,
       TextEditingController controller,
       String initialValue,
@@ -88,6 +89,7 @@ class Field extends TextFormField with Validate, TextHelpers {
 
   Field.firstName({
     Key key,
+    this.dateFormat = DateFormat.eur,
     FocusNode focusNode,
     String initialValue,
     TextEditingController controller,
@@ -172,6 +174,7 @@ class Field extends TextFormField with Validate, TextHelpers {
 
   Field.lastName({
     Key key,
+    this.dateFormat = DateFormat.eur,
     FocusNode focusNode,
     String initialValue,
     TextEditingController controller,
@@ -254,8 +257,10 @@ class Field extends TextFormField with Validate, TextHelpers {
           keyboardType: keyboardType,
         );
 
+  final DateFormat dateFormat;
   Field.email({
     Key key,
+    this.dateFormat = DateFormat.eur,
     FocusNode focusNode,
     String initialValue,
     TextEditingController controller,
@@ -337,6 +342,7 @@ class Field extends TextFormField with Validate, TextHelpers {
 
   Field.date({
     Key key,
+    this.dateFormat = DateFormat.eur,
     FocusNode focusNode,
     TextEditingController controller,
     String initialValue,
@@ -373,7 +379,7 @@ class Field extends TextFormField with Validate, TextHelpers {
     GlobalKey formKey,
     FormFieldSetter<String> onSaved,
     //TextInputType keyboardType,
-    FormFieldValidator<String> validator = Validate.date,
+    FormFieldValidator<String> validator,
   })  : assert(controller != null),
         super(
           key: formKey ?? key,
@@ -410,11 +416,11 @@ class Field extends TextFormField with Validate, TextHelpers {
           scrollPadding: scrollPadding,
           enableInteractiveSelection: enableInteractiveSelection,
           buildCounter: buildCounter,
-          validator: validator,
+          validator: validator ?? Validate.date(dateFormat),
           inputFormatters: [DateInputFormatter()],
           // not using html sanitizer for this field as it would interfere with parsing
           // InputFormatter and keyboard type should prevent unwanted characters.
-          onSaved: onSaved,
+          onSaved: TextHelpers.onSavedDate(controller, dateFormat, onSaved),
           keyboardType: TextInputType.phone,
         );
 
@@ -422,6 +428,7 @@ class Field extends TextFormField with Validate, TextHelpers {
   // inputFormatter tolerates letters so house numbers like 5B can be input.
   Field.number({
     Key key,
+    this.dateFormat = DateFormat.eur,
     FocusNode focusNode,
     TextEditingController controller,
     String initialValue,
@@ -507,6 +514,7 @@ class Field extends TextFormField with Validate, TextHelpers {
   // text is being sanitized onSaved to avoid messing up with displayed text
   Field.address({
     Key key,
+    this.dateFormat = DateFormat.eur,
     FocusNode focusNode,
     TextEditingController controller,
     String initialValue,
@@ -589,6 +597,7 @@ class Field extends TextFormField with Validate, TextHelpers {
 
   Field.country({
     Key key,
+    this.dateFormat = DateFormat.eur,
     FocusNode focusNode,
     TextEditingController controller,
     String initialValue,
@@ -672,6 +681,7 @@ class Field extends TextFormField with Validate, TextHelpers {
         );
   Field.phone({
     Key key,
+    this.dateFormat = DateFormat.eur,
     FocusNode focusNode,
     TextEditingController controller,
     String initialValue,
@@ -753,4 +763,88 @@ class Field extends TextFormField with Validate, TextHelpers {
           onSaved: TextHelpers.onSaved(controller, onSaved),
           keyboardType: TextInputType.phone,
         );
+
+  //No input formatters. htmlChars are converted onSaved
+  Field.companyName({
+    Key key,
+    FocusNode focusNode,
+    this.dateFormat = DateFormat.eur,
+    String initialValue,
+    TextEditingController controller,
+    InputDecoration decoration = const InputDecoration(),
+    TextInputAction textInputAction,
+    TextStyle style,
+    StrutStyle strutStyle,
+    TextDirection textDirection,
+    TextAlign textAlign = TextAlign.start,
+    ToolbarOptions toolbarOptions,
+    bool autofocus = false,
+    bool readOnly = false,
+    bool showCursor,
+    bool obscureText = false,
+    bool autocorrect = true,
+    bool autovalidate = false,
+    bool maxLengthEnforced = true,
+    int maxLines = 1,
+    int minLines,
+    bool expands = false,
+    int maxLength,
+    ValueChanged<String> onChanged,
+    GestureTapCallback onTap,
+    VoidCallback onEditingComplete,
+    ValueChanged<String> onFieldSubmitted,
+    bool enabled = true,
+    double cursorWidth = 2.0,
+    Radius cursorRadius,
+    Color cursorColor,
+    Brightness keyboardAppearance,
+    EdgeInsets scrollPadding = const EdgeInsets.all(20.0),
+    bool enableInteractiveSelection = true,
+    InputCounterWidgetBuilder buildCounter,
+    GlobalKey formKey,
+    FormFieldSetter<String> onSaved,
+    TextInputType keyboardType,
+    FormFieldValidator<String> validator = Validate.name,
+  })  : assert(controller != null),
+        super(
+          key: formKey ?? key,
+          focusNode: focusNode,
+          controller: controller,
+          initialValue: initialValue,
+          decoration: decoration,
+          textInputAction: textInputAction,
+          style: style,
+          strutStyle: strutStyle,
+          textDirection: textDirection,
+          textAlign: textAlign,
+          autofocus: autofocus,
+          readOnly: readOnly,
+          toolbarOptions: toolbarOptions,
+          showCursor: showCursor,
+          obscureText: obscureText,
+          autocorrect: autocorrect,
+          autovalidate: autovalidate,
+          maxLengthEnforced: maxLengthEnforced,
+          maxLines: maxLines,
+          minLines: minLines,
+          expands: expands,
+          maxLength: maxLength,
+          onTap: onTap,
+          onChanged: TextHelpers.onChanged(controller, onChanged),
+          onEditingComplete: onEditingComplete,
+          onFieldSubmitted: onFieldSubmitted,
+          enabled: enabled,
+          cursorWidth: cursorWidth,
+          cursorRadius: cursorRadius,
+          cursorColor: cursorColor,
+          keyboardAppearance: keyboardAppearance,
+          scrollPadding: scrollPadding,
+          enableInteractiveSelection: enableInteractiveSelection,
+          buildCounter: buildCounter,
+          validator: validator,
+          onSaved: TextHelpers.onSaved(controller, onSaved),
+          keyboardType: keyboardType,
+        );
 }
+
+enum DateFormat { eur, us }

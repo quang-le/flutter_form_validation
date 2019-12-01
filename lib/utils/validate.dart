@@ -1,5 +1,6 @@
 import 'package:filters/widgets/phone_service.dart';
 import 'package:flutter/material.dart';
+import 'package:filters/fields/field.dart';
 
 class Validate {
   static bool isValidEmail(String str) {
@@ -9,10 +10,10 @@ class Validate {
   }
 
   // format string to use with DateTime.parse. default is dd/mm/yyyy
-  static String formatStringForParsing(String str, String format) {
+  static String toIsoString(String str, DateFormat format) {
     if (str.length != 10) return null;
     String dateString;
-    if (format == 'us') {
+    if (format == DateFormat.us) {
       dateString = '${str[6]}'
           '${str[7]}'
           '${str[8]}'
@@ -66,25 +67,28 @@ class Validate {
     return date;
   }
 
-  static String date(String value) {
-    String formattedForParsing = Validate.formatStringForParsing(value, 'eur');
-    if (formattedForParsing == null) return 'Format Error';
-    String dateAndMonthValuesInRange =
-        Validate.checkDateStringFormatting(formattedForParsing);
-    if (dateAndMonthValuesInRange == null) return 'Date not in range';
-    DateTime date = Validate.toDate(dateAndMonthValuesInRange);
-    if (date != null) return null;
+  static Function date(DateFormat dateFormat) {
+    String validator(String value) {
+      String formattedForParsing = Validate.toIsoString(value, dateFormat);
+      if (formattedForParsing == null) return 'Format Error';
+      String dateAndMonthValuesInRange =
+          Validate.checkDateStringFormatting(formattedForParsing);
+      if (dateAndMonthValuesInRange == null) return 'Date not in range';
+      DateTime date = Validate.toDate(dateAndMonthValuesInRange);
+      if (date != null) return null;
 
-    return 'Please use dd/mm/yyyy format';
+      return 'Please use dd/mm/yyyy format';
+    }
+
+    return validator;
   }
 
   // Allow users to use built-in validator with custom messages and format(EUR vs US)
-  static Function customDateValidator(String dateFormat,
+  static Function customDateValidator(DateFormat dateFormat,
       {@required String dateNotInRangeErrorMsg,
       @required String dateErrorMsg}) {
     String customDateValidator(String value) {
-      String formattedForParsing =
-          Validate.formatStringForParsing(value, dateFormat);
+      String formattedForParsing = Validate.toIsoString(value, dateFormat);
       if (formattedForParsing == null) return dateErrorMsg;
       String dateAndMonthValuesInRange =
           Validate.checkDateStringFormatting(formattedForParsing);

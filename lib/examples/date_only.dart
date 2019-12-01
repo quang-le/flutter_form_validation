@@ -23,7 +23,7 @@ class _DateOnlyState extends State<DateOnly> {
           onSaved: (value) {
             print(value);
           },
-          validator: Validate.customDateValidator('eur',
+          validator: Validate.customDateValidator(DateFormat.eur,
               dateErrorMsg: 'custom error message',
               dateNotInRangeErrorMsg: 'custom msg date not in range'),
         ),

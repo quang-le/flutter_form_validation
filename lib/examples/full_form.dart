@@ -40,8 +40,15 @@ class _FullFormState extends State<FullForm> {
               print(value);
             },
           ),
+          Field.companyName(
+            controller: TextEditingController(),
+            decoration: InputDecoration(labelText: 'Company'),
+            onSaved: (value) {
+              print(value);
+            },
+          ),
           Field.date(
-            decoration: InputDecoration(labelText: 'Date'),
+            decoration: InputDecoration(labelText: 'Date of birth'),
             controller: TextEditingController(),
             onSaved: (value) {
               print(value);

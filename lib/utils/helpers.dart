@@ -1,4 +1,6 @@
+import 'package:filters/fields/field.dart';
 import 'package:filters/utils/sanitize.dart';
+import 'package:filters/utils/validate.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 
@@ -39,10 +41,21 @@ class TextHelpers {
   }
 
   static Function onSaved(TextEditingController controller,
-      [Function onSaved(String value)]) {
+      [Function customOnSaved(String value)]) {
     void save(String value) {
       String sanitizedValue = Sanitize.htmlChars(value);
-      onSaved(sanitizedValue);
+      customOnSaved(sanitizedValue);
+    }
+
+    return save;
+  }
+
+  static Function onSavedDate(
+      TextEditingController controller, DateFormat dateFormat,
+      [Function customOnSaved(String value)]) {
+    void save(String value) {
+      String toIsoString = Validate.toIsoString(value, dateFormat);
+      customOnSaved(toIsoString);
     }
 
     return save;
