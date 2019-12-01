@@ -5,6 +5,7 @@ import 'package:filters/utils/validate.dart';
 import 'package:filters/widgets/country.dart';
 import 'package:filters/widgets/phone_service.dart';
 import 'package:flutter/material.dart';
+import 'package:filters/utils/custom_dropdown.dart' as custom;
 
 class PhoneFormField extends StatefulWidget {
   final Function(String phoneNumber) onSaved;
@@ -15,6 +16,7 @@ class PhoneFormField extends StatefulWidget {
   final TextStyle errorStyle;
   final TextStyle hintStyle;
   final int errorMaxLines;
+  final double dropDownListHeight;
 
   PhoneFormField(
       {this.initialPhoneNumber,
@@ -24,7 +26,8 @@ class PhoneFormField extends StatefulWidget {
       this.hintText,
       this.errorStyle,
       this.hintStyle,
-      this.errorMaxLines});
+      this.errorMaxLines,
+      this.dropDownListHeight = 250.0});
 
   // this func for test purposes
   static Future<String> internationalizeNumber(String number, String iso) {
@@ -105,15 +108,17 @@ class _PhoneFormFieldState extends State<PhoneFormField> {
         children: <Widget>[
           Expanded(
             flex: 1,
-            child: DropdownButtonFormField<Country>(
+            child: custom.DropdownButtonFormField<Country>(
+              height: widget.dropDownListHeight,
               value: selectedItem,
               onChanged: (Country newValue) {
                 setState(() {
                   selectedItem = newValue;
                 });
               },
-              items: itemList.map<DropdownMenuItem<Country>>((Country value) {
-                return DropdownMenuItem<Country>(
+              items: itemList
+                  .map<custom.DropdownMenuItem<Country>>((Country value) {
+                return custom.DropdownMenuItem<Country>(
                   value: value,
                   child: Container(
                     child: Row(

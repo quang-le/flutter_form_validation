@@ -8,6 +8,8 @@ Once the project is done, I'll probably re-organize it as a package.
 
 PhoneFormField widget adapted from InternationalPhoneInput from [international_phone_input package](https://pub.dev/packages/international_phone_input), which I contributed to. 
 
+As Flutter doesn't allow setting DropDownList height yet, I'm using [this solution](https://gist.github.com/tudor07/9f886102f3cb2f69314e159ea10572e1) from [tudor07](https://stackoverflow.com/users/3979172/tudorprodan), with a very minor tweak.
+
 regexp for email format validation taken from [validators package](https://pub.dev/packages/validators)
 
 ## Targeted features
@@ -70,6 +72,5 @@ To use the default `inputFormatters` but with custom error messages, use the ad-
 
 26/11/2019: Refactor first name, last name, email and date fields to use inheritance for cleaner code. Used named constructors i.o. separated widgets. On the minus side: the `controller` field is now mandatory to avoid erratic cursor behavior.
 
-*Learnings*: use of high-order functions (to allow users to still use onChanged Field), inheritance in Dart
 
 29/11/2019: I give up on postal address format and validation, as there's too much variation from country to country or even within a country. I make a input formatter and validator for Belgium for the sake of the exercise, but I give up on the idea of having a generic solution for that field. similar idea with zip code. I will try and implement a country selector, which should make it easier to apply validators and formatters on a per country basis. 
