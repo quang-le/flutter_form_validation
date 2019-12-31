@@ -16,6 +16,11 @@ class _FullFormState extends State<FullForm> {
       key: _formKey,
       child: Column(
         children: <Widget>[
+          PhoneFormField(
+            onSaved: (value) {
+              print(value);
+            },
+          ),
           Field.firstName(
             decoration: InputDecoration(labelText: 'First Name'),
             controller: TextEditingController(),
@@ -54,11 +59,7 @@ class _FullFormState extends State<FullForm> {
               print(value);
             },
           ),
-          PhoneFormField(
-            onSaved: (value) {
-              print(value);
-            },
-          ),
+          Spacer(),
           RaisedButton(
             child: Text('Submit'),
             onPressed: () {

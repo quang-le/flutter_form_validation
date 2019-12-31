@@ -228,10 +228,16 @@ class _DropdownMenuRouteLayout<T> extends SingleChildLayoutDelegate {
     @required this.menuTop,
     @required this.menuHeight,
     @required this.textDirection,
+    this.customMaxHeight,
   });
 
   final Rect buttonRect;
   final double menuTop;
+
+  ///CUSTOM CODE
+  final double customMaxHeight;
+
+  ///END
   final double menuHeight;
   final TextDirection textDirection;
 
@@ -250,7 +256,10 @@ class _DropdownMenuRouteLayout<T> extends SingleChildLayoutDelegate {
       minWidth: width,
       maxWidth: width,
       minHeight: 0.0,
-      maxHeight: maxHeight,
+
+      ///CUSTOM CODE: allow user to set max height but keep default layout available
+      /// unnecessary as is, but keep it here case it's useful for repositioning the menu
+      maxHeight: customMaxHeight ?? maxHeight,
     );
   }
 
@@ -417,12 +426,15 @@ class _DropdownRoutePage<T> extends StatelessWidget {
 
     double menuTop = (buttonTop - selectedItemOffset) -
         (_kMenuItemHeight - buttonRect.height) / 2.0;
+
     final double preferredMenuHeight =
         (items.length * _kMenuItemHeight) + kMaterialListPadding.vertical;
 
     // If there are too many elements in the menu, we need to shrink it down
     // so it is at most the maxMenuHeight.
-    final double menuHeight = math.min(maxMenuHeight, preferredMenuHeight);
+    ///CUSTOM CODE: MANUALLY SET HEIGHT
+    final double menuHeight =
+        height ?? math.min(maxMenuHeight, preferredMenuHeight);
 
     double menuBottom = menuTop + menuHeight;
 
@@ -444,9 +456,12 @@ class _DropdownRoutePage<T> extends StatelessWidget {
       // [buttonTop - menuTop] is larger than selectedItemOffset, ie. when
       // the button is close to the bottom of the screen and the selected item
       // is close to 0.
-      final double scrollOffset = preferredMenuHeight > maxMenuHeight
-          ? math.max(0.0, selectedItemOffset - (buttonTop - menuTop))
-          : 0.0;
+      ///ScrollOffset= what part of the item list is shown
+      final double scrollOffset = height != null
+          ? 0.0
+          : preferredMenuHeight > maxMenuHeight
+              ? math.max(0.0, selectedItemOffset - (buttonTop - menuTop))
+              : 0.0;
       route.scrollController =
           ScrollController(initialScrollOffset: scrollOffset);
     }
@@ -454,6 +469,8 @@ class _DropdownRoutePage<T> extends StatelessWidget {
     final TextDirection textDirection = Directionality.of(context);
     Widget menu = _DropdownMenu<T>(
       route: route,
+
+      /// CODE FROM SO SOLUTION
       height: height,
       padding: padding.resolve(textDirection),
     );
@@ -471,7 +488,12 @@ class _DropdownRoutePage<T> extends StatelessWidget {
           return CustomSingleChildLayout(
             delegate: _DropdownMenuRouteLayout<T>(
               buttonRect: buttonRect,
+
+              /// CUSTOM CODE: set menu position
               menuTop: menuTop,
+              customMaxHeight: height,
+
+              ///END
               menuHeight: menuHeight,
               textDirection: textDirection,
             ),
